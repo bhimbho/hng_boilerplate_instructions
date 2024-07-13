@@ -248,7 +248,98 @@ components:
           format: date-time
 
 paths:
- 
+  /login:
+    post:
+      summary: Authenticate users and admins
+      operationId: Authentication
+      tags: 
+        - Authentication
+      responses:
+        '200':
+          description: Login Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user: 
+                    $ref: '#/components/schemas/User'
+                  token: 
+                    type: string
+              example:
+                - id: "1a2b3c4d"
+                  first_name: "John"
+                  last_name: "Doe"
+                  email: "john.doe@example.com"
+                  created_at: "2023-01-01T00:00:00Z"
+                  updated_at: "2023-01-02T00:00:00Z"
+                - token: 'BEARER-TOKEN'
+        '422':
+          description: 'Unprocessable Entity'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+              example:
+                errors:
+                  email:
+                    0: 
+                      email field is required
+                  password:
+                    0: 
+                      password field is required
+                
+  /register:
+    post:
+      tags:
+        - Authentication
+      summary: Register User
+      responses:
+        '200':
+          description: register users and admin
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user: 
+                    $ref: '#/components/schemas/User'
+                  token: 
+                    type: string
+        '422':
+          description: 'Unprocessable Entity'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: string
+              example:
+                errors:
+                  email:
+                    0: 
+                      email field is required
+                  password:
+                    0: 
+                      password field is required
+                  firstname:
+                    0: 
+                      firstname field is required
+            
+    
+    
   /admins:
     get:
       summary: Get all admins
@@ -277,6 +368,7 @@ paths:
                   email: "jane.doe@example.com"
                   created_at: "2023-01-01T00:00:00Z"
                   updated_at: "2023-01-02T00:00:00Z"
+    
 
     post:
       summary: Create an admin
@@ -336,7 +428,7 @@ paths:
                 created_at: "2023-01-01T00:00:00Z"
                 updated_at: "2023-01-02T00:00:00Z"
 
-    post:
+    put:
       summary: Update an admin by ID
       operationId: updateAdminById
       tags:
@@ -387,6 +479,8 @@ paths:
       responses:
         '204':
           description: Admin deleted
+        '404':
+          description: Not Found
   /users:
     get:
       summary: Get all users
@@ -442,7 +536,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
 
-    post:
+    put:
       summary: Update a user by ID
       operationId: updateUserById
       tags:
@@ -538,7 +632,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Organisation'
 
-    post:
+    put:
       summary: Update an organisation by ID
       operationId: updateOrganisationById
       tags:
@@ -556,7 +650,7 @@ paths:
             schema:
               $ref: '#/components/schemas/Organisation'
       responses:
-        '200':
+        '201':
           description: Organisation updated
           content:
             application/json:
@@ -663,26 +757,6 @@ paths:
                 role_id: "1a2b3c4d"
                 created_at: "2023-01-01T00:00:00Z"
                 updated_at: "2023-01-02T00:00:00Z"
-
-    post:
-      summary: Update an organisation invitation by ID
-      operationId: updateOrganisationInvitationById
-      tags:
-        - Organisation Invitations
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/OrganisationInvitation'
-            example:
-              organisation
               
   /roles:
     get:
@@ -739,7 +813,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Role'
 
-    post:
+    put:
       summary: Update a role by ID
       operationId: updateRoleById
       tags:
@@ -835,7 +909,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Permission'
 
-    post:
+    put:
       summary: Update a permission by ID
       operationId: updatePermissionById
       tags:
@@ -930,47 +1004,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ActivityLog'
-
-    post:
-      summary: Update an activity log by ID
-      operationId: updateActivityLogById
-      tags:
-        - Activity Logs
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ActivityLog'
-      responses:
-        '200':
-          description: Activity log updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActivityLog'
-
-    delete:
-      summary: Delete an activity log by ID
-      operationId: deleteActivityLogById
-      tags:
-        - Activity Logs
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        '204':
-          description: Activity log deleted
 
   /notifications:
     get:
