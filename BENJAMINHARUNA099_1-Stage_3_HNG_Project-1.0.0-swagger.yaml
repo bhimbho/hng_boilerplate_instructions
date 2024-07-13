@@ -1,0 +1,1069 @@
+openapi: 3.0.3
+info:
+  title: Your API
+  description: API for managing organisations, users, roles, and permissions.
+  version: 1.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/BENJAMINHARUNA099_1/Stage_3_HNG_Project/1.0.0
+  - url: http://api.domain.com/
+    description: Main server
+
+components:
+  schemas:
+    Admin:
+          type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+            first_name:
+              type: string
+              example: "John"
+            last_name:
+              type: string
+              example: "Doe"
+            email:
+              type: string
+              format: email
+              example: "john.doe@example.com"
+            password:
+              type: string
+              example: "password"
+            created_at:
+              type: string
+              format: date-time
+              example: "2023-01-01T00:00:00Z"
+            updated_at:
+              type: string
+              format: date-time
+              example: "2023-01-02T00:00:00Z"
+          required:
+            - first_name
+            - last_name
+            - email
+            - password
+            
+
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        first_name:
+          type: string
+        last_name:
+          type: string
+        other_name:
+          type: string
+        email:
+          type: string
+          format: email
+        email_verified_at:
+          type: string
+          format: date-time
+        password:
+          type: string
+        image_url:
+          type: string
+        google_id:
+          type: string
+        facebook_id:
+          type: string
+        current_organisation_id:
+          type: string
+          format: uuid
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Organisation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        owner_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Role:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        organisation_id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Permission:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    OrganisationUser:
+      type: object
+      properties:
+        organisation_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        role_id:
+          type: string
+          format: uuid
+
+    ActivityLog:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        organisation_id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        action:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+        notifiable_type:
+          type: string
+        notifiable_id:
+          type: string
+          format: uuid
+        data:
+          type: string
+        read_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Plan:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        currency:
+          type: string
+        price:
+          type: integer
+        interval:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        organisation_id:
+          type: string
+          format: uuid
+        plan_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        amount:
+          type: integer
+        starts_at:
+          type: string
+          format: date-time
+        ends_at:
+          type: string
+          format: date-time
+        cancelled_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+paths:
+ 
+  /admins:
+    get:
+      summary: Get all admins
+      operationId: getAdmins
+      tags:
+        - Admins
+      responses:
+        '200':
+          description: A list of admins
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Admin'
+              example:
+                - id: "1a2b3c4d"
+                  first_name: "John"
+                  last_name: "Doe"
+                  email: "john.doe@example.com"
+                  created_at: "2023-01-01T00:00:00Z"
+                  updated_at: "2023-01-02T00:00:00Z"
+                - id: "5e6f7g8h"
+                  first_name: "Jane"
+                  last_name: "Doe"
+                  email: "jane.doe@example.com"
+                  created_at: "2023-01-01T00:00:00Z"
+                  updated_at: "2023-01-02T00:00:00Z"
+
+    post:
+      summary: Create an admin
+      operationId: createAdmin
+      tags:
+        - Admins
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Admin'
+            example:
+              first_name: "John"
+              last_name: "Doe"
+              email: "john.doe@example.com"
+              password: "password"
+      responses:
+        '201':
+          description: Admin created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Admin'
+              example:
+                id: "1a2b3c4d"
+                first_name: "John"
+                last_name: "Doe"
+                email: "john.doe@example.com"
+                created_at: "2023-01-01T00:00:00Z"
+                updated_at: "2023-01-01T00:00:00Z"
+
+  /admins/{id}:
+    get:
+      summary: Get an admin by ID
+      operationId: getAdminById
+      tags:
+        - Admins
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: An admin object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Admin'
+              example:
+                id: "1a2b3c4d"
+                first_name: "John"
+                last_name: "Doe"
+                email: "john.doe@example.com"
+                created_at: "2023-01-01T00:00:00Z"
+                updated_at: "2023-01-02T00:00:00Z"
+
+    post:
+      summary: Update an admin by ID
+      operationId: updateAdminById
+      tags:
+        - Admins
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Admin'
+            example:
+              first_name: "John"
+              last_name: "Doe"
+              email: "john.doe@example.com"
+      responses:
+        '200':
+          description: Admin updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Admin'
+              example:
+                id: "1a2b3c4d"
+                first_name: "John"
+                last_name: "Doe"
+                email: "john.doe@example.com"
+                created_at: "2023-01-01T00:00:00Z"
+                updated_at: "2023-01-02T00:00:00Z"
+
+    delete:
+      summary: Delete an admin by ID
+      operationId: deleteAdminById
+      tags:
+        - Admins
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Admin deleted
+  /users:
+    get:
+      summary: Get all users
+      operationId: getUsers
+      tags:
+        - Users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+    post:
+      summary: Create a user
+      operationId: createUser
+      tags:
+        - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      operationId: getUserById
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A user object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    post:
+      summary: Update a user by ID
+      operationId: updateUserById
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+
+    delete:
+      summary: Delete a user by ID
+      operationId: deleteUserById
+      tags:
+        - Users
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: User deleted
+
+  /organisations:
+    get:
+      summary: Get all organisations
+      operationId: getOrganisations
+      tags:
+        - Organisations
+      responses:
+        '200':
+          description: A list of organisations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organisation'
+
+    post:
+      summary: Create an organisation
+      operationId: createOrganisation
+      tags:
+        - Organisations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organisation'
+      responses:
+        '201':
+          description: Organisation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+
+  /organisations/{id}:
+    get:
+      summary: Get an organisation by ID
+      operationId: getOrganisationById
+      tags:
+        - Organisations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: An organisation object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+
+    post:
+      summary: Update an organisation by ID
+      operationId: updateOrganisationById
+      tags:
+        - Organisations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Organisation'
+      responses:
+        '200':
+          description: Organisation updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organisation'
+
+    delete:
+      summary: Delete an organisation by ID
+      operationId: deleteOrganisationById
+      tags:
+        - Organisations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Organisation deleted
+  /organisation_invitations:
+    get:
+      summary: Get all organisation invitations
+      operationId: getOrganisationInvitations
+      tags:
+        - Organisation Invitations
+      responses:
+        '200':
+          description: A list of organisation invitations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrganisationInvitation'
+              example:
+                - id: "1a2b3c4d"
+                  organisation_id: "1a2b3c4d"
+                  email: "invitee@example.com"
+                  role_id: "1a2b3c4d"
+                  created_at: "2023-01-01T00:00:00Z"
+                  updated_at: "2023-01-02T00:00:00Z"
+                - id: "5e6f7g8h"
+                  organisation_id: "5e6f7g8h"
+                  email: "invitee2@example.com"
+                  role_id: "5e6f7g8h"
+                  created_at: "2023-01-01T00:00:00Z"
+                  updated_at: "2023-01-02T00:00:00Z"
+
+    post:
+      summary: Create an organisation invitation
+      operationId: createOrganisationInvitation
+      tags:
+        - Organisation Invitations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisationInvitation'
+            example:
+              organisation_id: "1a2b3c4d"
+              email: "invitee@example.com"
+              role_id: "1a2b3c4d"
+      responses:
+        '201':
+          description: Organisation invitation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationInvitation'
+              example:
+                id: "1a2b3c4d"
+                organisation_id: "1a2b3c4d"
+                email: "invitee@example.com"
+                role_id: "1a2b3c4d"
+                created_at: "2023-01-01T00:00:00Z"
+                updated_at: "2023-01-01T00:00:00Z"
+
+  /organisation_invitations/{id}:
+    get:
+      summary: Get an organisation invitation by ID
+      operationId: getOrganisationInvitationById
+      tags:
+        - Organisation Invitations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: An organisation invitation object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganisationInvitation'
+              example:
+                id: "1a2b3c4d"
+                organisation_id: "1a2b3c4d"
+                email: "invitee@example.com"
+                role_id: "1a2b3c4d"
+                created_at: "2023-01-01T00:00:00Z"
+                updated_at: "2023-01-02T00:00:00Z"
+
+    post:
+      summary: Update an organisation invitation by ID
+      operationId: updateOrganisationInvitationById
+      tags:
+        - Organisation Invitations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisationInvitation'
+            example:
+              organisation
+              
+  /roles:
+    get:
+      summary: Get all roles
+      operationId: getRoles
+      tags:
+        - Roles
+      responses:
+        '200':
+          description: A list of roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+    post:
+      summary: Create a role
+      operationId: createRole
+      tags:
+        - Roles
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Role'
+      responses:
+        '201':
+          description: Role created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+
+
+  /roles/{id}:
+    get:
+      summary: Get a role by ID
+      operationId: getRoleById
+      tags:
+        - Roles
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A role object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+
+    post:
+      summary: Update a role by ID
+      operationId: updateRoleById
+      tags:
+        - Roles
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Role'
+      responses:
+        '200':
+          description: Role updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+
+    delete:
+      summary: Delete a role by ID
+      operationId: deleteRoleById
+      tags:
+        - Roles
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Role deleted
+
+  /permissions:
+    get:
+      summary: Get all permissions
+      operationId: getPermissions
+      tags:
+        - Permissions
+      responses:
+        '200':
+          description: A list of permissions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Permission'
+
+    post:
+      summary: Create a permission
+      operationId: createPermission
+      tags:
+        - Permissions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permission'
+      responses:
+        '201':
+          description: Permission created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permission'
+
+  /permissions/{id}:
+    get:
+      summary: Get a permission by ID
+      operationId: getPermissionById
+      tags:
+        - Permissions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A permission object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permission'
+
+    post:
+      summary: Update a permission by ID
+      operationId: updatePermissionById
+      tags:
+        - Permissions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Permission'
+      responses:
+        '200':
+          description: Permission updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permission'
+
+    delete:
+      summary: Delete a permission by ID
+      operationId: deletePermissionById
+      tags:
+        - Permissions
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Permission deleted
+
+  /activity_logs:
+    get:
+      summary: Get all activity logs
+      operationId: getActivityLogs
+      tags:
+        - Activity Logs
+      responses:
+        '200':
+          description: A list of activity logs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActivityLog'
+
+    post:
+      summary: Create an activity log
+      operationId: createActivityLog
+      tags:
+        - Activity Logs
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityLog'
+      responses:
+        '201':
+          description: Activity log created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityLog'
+
+  /activity_logs/{id}:
+    get:
+      summary: Get an activity log by ID
+      operationId: getActivityLogById
+      tags:
+        - Activity Logs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: An activity log object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityLog'
+
+    post:
+      summary: Update an activity log by ID
+      operationId: updateActivityLogById
+      tags:
+        - Activity Logs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivityLog'
+      responses:
+        '200':
+          description: Activity log updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ActivityLog'
+
+    delete:
+      summary: Delete an activity log by ID
+      operationId: deleteActivityLogById
+      tags:
+        - Activity Logs
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Activity log deleted
+
+  /notifications:
+    get:
+      summary: Get all notifications
+      operationId: getNotifications
+      tags:
+        - Notifications
+      responses:
+        '200':
+          description: A list of notifications
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+
+    post:
+      summary: Create a notification
+      operationId: createNotification
+      tags:
+        - Notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      responses:
+        '201':
+          description: Notification created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+
+  /notifications/{id}:
+    get:
+      summary: Get a notification by ID
+      operationId: getNotificationById
+      tags:
+        - Notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A notification object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+
+    post:
+      summary: Update a notification by ID
+      operationId: updateNotificationById
+      tags:
+        - Notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+      responses:
+        '200':
+          description: Notification updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+
+    delete:
+      summary: Delete a notification by ID
+      operationId: deleteNotificationById
+      tags:
+        - Notifications
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Notification deleted
